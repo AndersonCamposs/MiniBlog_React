@@ -36,7 +36,6 @@ const Register = () => {
   useEffect(() => {
     /*Se acontecer algum erro no back end, o state de error do front end será
     alterado para aquele erro vindo do back end, para que seja exibido ao usuáro*/
-    console.log(authError);
     if (authError) {
       setError(authError);
     }
