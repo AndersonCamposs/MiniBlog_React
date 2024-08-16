@@ -1,3 +1,6 @@
+//Firebase config
+import { db } from '../firebase/config.js';
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -24,21 +27,35 @@ export const useAuthentication = () => {
     }
   }
 
-  const createUser = async () => {
+  const createUser = async (data) => {
     checkIfIsCancelled();
 
     setLoading(true);
+    setError(null);
 
     try {
       const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
       await updateProfile(user, { displayName: data.displayName });
+      setLoading(false);
+      return user;
     } catch (error) {
       console.log(error.message);
       console.log(typeof error.message);
-    }
 
-    setLoading(false);
+      let systemErrorMessage;
+
+      if (error.message.includes('Password')) {
+        systemErrorMessage = 'A senha deve ter pelo menos seis caracteres.';
+      } else if (error.message.includes('email-already')) {
+        systemErrorMessage = 'E-mail já cadastrado.';
+      } else {
+        systemErrorMessage = 'Ocorreu algum erro. Tente mais tarde!';
+      }
+
+      setLoading(false);
+      setError(systemErrorMessage);
+    }
   };
 
   useEffect(() => {

@@ -1,5 +1,7 @@
 //CSS
 import styles from './Register.module.css';
+//Custom hooks
+import { useAuthentication } from '../../hooks/useAuthentication';
 
 import { useState, useEffect } from 'react';
 
@@ -10,7 +12,9 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const { createUser, error: authError, loading } = useAuthentication();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError('');
@@ -25,9 +29,18 @@ const Register = () => {
       setError('As senhas precisam ser iguais');
       return;
     }
-
-    console.log(user);
+    const res = await createUser(user);
+    console.log(res);
   };
+
+  useEffect(() => {
+    /*Se acontecer algum erro no back end, o state de error do front end será
+    alterado para aquele erro vindo do back end, para que seja exibido ao usuáro*/
+    console.log(authError);
+    if (authError) {
+      setError(authError);
+    }
+  }, [authError]);
 
   return (
     <div className={styles.register}>
@@ -78,10 +91,13 @@ const Register = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </label>
-        <button className="btn" type="submit">
-          Cadastrar
-        </button>
-        {error && <p className="error">As senhas precisam ser iguais</p>}
+        {!loading && <button className="btn">Cadastrar</button>}
+        {loading && (
+          <button className="btn" disabled>
+            Aguarde...
+          </button>
+        )}
+        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );
