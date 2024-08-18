@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 #firebase configs
-firebase
+src/firebase
