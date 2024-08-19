@@ -43,7 +43,9 @@ export const useInsertDocument = (docCollection) => {
     }
   };
 
-  useEffect(() => setCancelled(true), []);
+  // useEffect(() => {
+  //   return () => setCancelled(true);
+  // }, [response.loading]);
 
   return { insertDocument, response };
 };
