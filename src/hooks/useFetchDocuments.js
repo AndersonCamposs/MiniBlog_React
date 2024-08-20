@@ -25,7 +25,14 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
 
         //dashboard
 
-        q = await query(collectionRef, orderBy('createdAt', 'desc'));
+        if (search) {
+          //realiza a query  naseada no array de tags enviado no
+          //cadastro do post
+          q = await query(collectionRef, where('tagsArray', 'array-contains', search), orderBy('createdAt', 'desc'));
+        } else {
+          q = await query(collectionRef, orderBy('createdAt', 'desc'));
+        }
+
         await onSnapshot(q, (querySnapshot) => {
           setDocuments(
             querySnapshot.docs.map((doc) => ({
