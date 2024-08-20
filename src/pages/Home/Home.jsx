@@ -9,18 +9,28 @@ import { useFetchDocuments } from '../../hooks/useFetchDocuments';
 import PostDetail from '../../components/PostDetail';
 
 const Home = () => {
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState('');
   const { documents: posts, loading, error } = useFetchDocuments('posts');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
+    // handleSubmit do formulário de busca
     e.preventDefault();
+
+    if (query) {
+      return navigate(`/search?q=${query}`);
+    }
   };
 
   return (
     <div className={styles.home}>
       <h1>Veja os nossos posts mais recentes</h1>
       <form className={styles.search_form} onSubmit={(e) => handleSubmit(e)}>
-        <input type="text" placeholder="Ou busque por tags..." onChange={(e) => setQuery(e.target.value)} />
+        <input
+          type="text"
+          placeholder="Ou busque por tags..."
+          onChange={(e) => setQuery(e.target.value.toLowerCase())}
+        />
         <button className="btn btn-dark">Pesquisar</button>
       </form>
       <div>
