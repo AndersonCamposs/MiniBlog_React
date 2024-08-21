@@ -16,6 +16,7 @@ import Register from './pages/Register/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import CreatePost from './pages/CreatePost/CreatePost';
 import Search from './pages/Search/Search';
+import Post from './pages/Post/Post';
 //components
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
@@ -47,6 +48,7 @@ function App() {
               {/*a rota /search recece um search param chamado q
               /search?q*/}
               <Route path="/search" element={<Search />} />
+              <Route path="/posts/:id" element=<Post /> />
               <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
               <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
               <Route path="/posts/create" element={user ? <CreatePost /> : <Navigate to="/" />} />
